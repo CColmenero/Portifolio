@@ -22,14 +22,14 @@ params = {'behavior': 'allow', 'downloadPath': downloadPath}
 navegador.execute_cdp_cmd('Page.setDownloadBehavior', params)
 
 #Acessando o sistema
-navegador.get('https://tmt.multitms.com.br/Login')
+navegador.get('https://*.multitms.com.br/Login')
 navegador.maximize_window()
 navegador.find_element(By.ID, 'Usuario').send_keys('Usuario')
 navegador.find_element(By.ID, 'Senha').send_keys('Senha', Keys.ENTER)
 time.sleep(2)
 
 #Acessando tela de relatórios
-navegador.get(r'https://tmt.multitms.com.br/*')
+navegador.get(r'https://*.multitms.com.br/*')
 time.sleep(2)
 
 #Inicializando variáveis de data
@@ -57,10 +57,10 @@ navegador.find_element(By.XPATH, '/html/body/div[2]/div/div/main/div[2]/div/div[
 
 
 #Abrindo o arquivo base para tratamento
-arquivo = glob.glob(r'C:\Users\CarlosColmenero\Downloads\Relatório_de_Fretes_Terceirizados_*.xls')
+arquivo = glob.glob(r'C:\Users\Downloads\Relatório_de_Fretes_Terceirizados_*.xls')
 
 while len(arquivo) == 0:
-    arquivo = glob.glob(r'C:\Users\CarlosColmenero\Downloads\Relatório_de_Fretes_Terceirizados_*.xls')
+    arquivo = glob.glob(r'C:\Users\Downloads\Relatório_de_Fretes_Terceirizados_*.xls')
     time.sleep(1)
 else: 
     relatorio_total_viagens_df = pd.read_excel(arquivo[0])
@@ -80,12 +80,12 @@ relatorio_viagens_df['gap'] = (1 - (relatorio_viagens_df['Vl. Bruto'] / relatori
 # display(relatorio_viagens_df)
 
 #Removendo veículos agregados - Possuem regra diferente de precificação
-lista_agregados = ['GOV5046, END9988','MIR5039, CPI5614', 'BTA1528, CPI5631', 'CZC3050, CPI6156', 'ELW4H92, CPG2759', 'JOD8I15, MFX9988', 'JLD3B46,  CPI5614']
+lista_agregados = ['AAA0000, BBB0000','CCC0000, DDD0000', 'EEE0000, FFF000', 'GGG0000, HHH0000']
 relatorio_viagens_sem_agregados_df = relatorio_viagens_df[~relatorio_viagens_df['Veículo'].isin(lista_agregados)]
 # display(relatorio_viagens_sem_agregados_df)  
 
 #Salvando base
-relatorio_viagens_sem_agregados_df.to_excel(r'C:\Users\CarlosColmenero\Downloads\base_viagens.xlsx', index=False)
+relatorio_viagens_sem_agregados_df.to_excel(r'C:\Users\Downloads\base_viagens.xlsx', index=False)
 
 #Editando datas para formato Numpy v.
 locale.setlocale(locale.LC_TIME, 'pt_BR.UFT-8')
@@ -141,7 +141,7 @@ relatorio_gap_df = relatorio_gap_df[['Tipo Operação', mes_anterior_rotulo, mes
 # display(relatorio_gap_df)
 
 #Filtrando lista para o gráfico
-lista_operacoes = ['NESTLÉ', 'PURINA', 'LEROY MERLIN', 'LM - REVERSA', 'UNILEVER', 'P&G']
+lista_operacoes = ['A', 'B', 'C', 'D', 'E']
 base_grafico = relatorio_gap_df[relatorio_gap_df['Tipo Operação'].isin(lista_operacoes)]
 # display(base_grafico)    
 
@@ -176,7 +176,7 @@ plt.yticks([])
 plt.legend(fontsize='xx-large', frameon=False, loc='upper left')
 plt.tick_params(axis='x', length=0)
 plt.box(False)
-plt.savefig(r'C:\Users\CarlosColmenero\Downloads\grafico.png', bbox_inches='tight', dpi=40)
+plt.savefig(r'C:\Users\Downloads\grafico.png', bbox_inches='tight', dpi=40)
 # plt.show()
 
 #Parametrizando o envio de e-mail
@@ -197,15 +197,15 @@ Cabe ressaltar que não estão contemplados os fretes realizados pelos agregados
 <html><body><br></body></html>
     {relatorio_gap_df.to_html(index=False, decimal='.')}
 <html><body><br></body></html>
-    <html><body><img src="C:\\Users\\CarlosColmenero\\Downloads\\grafico.png" style="width:100%"/></p></body></html>
+    <html><body><img src="C:\\Users\\Downloads\\grafico.png" style="width:100%"/></p></body></html>
 <html><body><br></body></html>
 Em caso de dúvidas fico à disposição.
 <html><body><br></body></html>
 Atenciosamente,
-<html><body><img src='C:\\Users\\CarlosColmenero\\TMTLOG\\TMT CORPORATIVO - Documentos\\TMTLOG\\Carlos\\assinatura_email.png' style="width:100%"/></p></body></html>
+<html><body><img src='C:\\Users\\TMTLOG\\TMT CORPORATIVO - Documentos\\TMTLOG\\Carlos\\assinatura_email.png' style="width:100%"/></p></body></html>
 """    
 #Anexos:
-attachment  = r'C:\\Users\\CarlosColmenero\\Downloads\\base_viagens.xlsx'
+attachment  = r'C:\\Users\\Downloads\\base_viagens.xlsx'
 mail.Attachments.Add(attachment)
 mail.Send()
 
